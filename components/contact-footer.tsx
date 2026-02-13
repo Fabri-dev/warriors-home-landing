@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
+import { useLanguage } from "@/lib/language-context"
 
 interface FormData {
   name: string
@@ -31,6 +32,7 @@ interface FormErrors {
 export function ContactFooter() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const { t } = useLanguage()
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -48,21 +50,21 @@ export function ContactFooter() {
     const newErrors: FormErrors = {}
 
     if (!formData.name.trim()) {
-      newErrors.name = "Ingresá tu nombre"
+      newErrors.name = t("contact.form.error.name")
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = "Ingresá tu WhatsApp"
+      newErrors.phone = t("contact.form.error.phone")
     } else if (!/^[\d\s\-+()]{8,}$/.test(formData.phone)) {
-      newErrors.phone = "Número inválido"
+      newErrors.phone = t("contact.form.error.phone.invalid")
     }
 
     if (!formData.experience) {
-      newErrors.experience = "Seleccioná tu nivel"
+      newErrors.experience = t("contact.form.error.experience")
     }
 
     if (!formData.presencial && !formData.online) {
-      newErrors.goal = "Elegí al menos una modalidad"
+      newErrors.goal = t("contact.form.error.goal")
     }
 
     setErrors(newErrors)
@@ -94,16 +96,16 @@ export function ContactFooter() {
             transition={{ duration: 0.6 }}
             className="flex flex-col justify-center"
           >
-            <p className="text-[#dc2626] uppercase tracking-widest text-sm font-semibold mb-6">Contacto</p>
+            <p className="text-[#dc2626] uppercase tracking-widest text-sm font-semibold mb-6">{t("contact.label")}</p>
             <h2 className="font-[family-name:var(--font-oswald)] text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight leading-tight">
-              ¿Listo para dar
+              {t("contact.headline1")}
               <br />
-              <span className="text-[#dc2626]">el paso?</span>
+              <span className="text-[#dc2626]">{t("contact.headline2")}</span>
             </h2>
 
             <blockquote className="mt-8 border-l-4 border-[#dc2626] pl-6 py-2">
               <p className="text-xl md:text-2xl text-[#a3a3a3] italic leading-relaxed">
-                "Si no lo hacés vos, nadie lo va a hacer por vos."
+                {'"'}{t("contact.quote")}{'"'}
               </p>
             </blockquote>
 
@@ -135,9 +137,9 @@ export function ContactFooter() {
                   <CheckCircle className="w-8 h-8 text-[#dc2626]" />
                 </div>
                 <h3 className="font-[family-name:var(--font-oswald)] text-2xl font-bold uppercase mb-3">
-                  ¡Mensaje enviado!
+                  {t("contact.form.success.title")}
                 </h3>
-                <p className="text-[#a3a3a3]">Te contactaremos pronto por WhatsApp.</p>
+                <p className="text-[#a3a3a3]">{t("contact.form.success.text")}</p>
               </div>
             ) : (
               <form
@@ -147,12 +149,12 @@ export function ContactFooter() {
                 {/* Name */}
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-sm uppercase tracking-wide">
-                    Nombre
+                    {t("contact.form.name")}
                   </Label>
                   <Input
                     id="name"
                     type="text"
-                    placeholder="Tu nombre"
+                    placeholder={t("contact.form.name.placeholder")}
                     value={formData.name}
                     onChange={(e) => {
                       setFormData({ ...formData, name: e.target.value })
@@ -173,12 +175,12 @@ export function ContactFooter() {
                 {/* Phone */}
                 <div className="space-y-2">
                   <Label htmlFor="phone" className="text-sm uppercase tracking-wide">
-                    WhatsApp
+                    {t("contact.form.phone")}
                   </Label>
                   <Input
                     id="phone"
                     type="tel"
-                    placeholder="+54 223 123 4567"
+                    placeholder={t("contact.form.phone.placeholder")}
                     value={formData.phone}
                     onChange={(e) => {
                       setFormData({ ...formData, phone: e.target.value })
@@ -199,7 +201,7 @@ export function ContactFooter() {
                 {/* Experience */}
                 <div className="space-y-2">
                   <Label htmlFor="experience" className="text-sm uppercase tracking-wide">
-                    Nivel de experiencia
+                    {t("contact.form.experience")}
                   </Label>
                   <Select
                     value={formData.experience}
@@ -213,20 +215,20 @@ export function ContactFooter() {
                         errors.experience ? "border-[#dc2626]" : ""
                       }`}
                     >
-                      <SelectValue placeholder="Seleccioná tu nivel" />
+                      <SelectValue placeholder={t("contact.form.experience.placeholder")} />
                     </SelectTrigger>
                     <SelectContent className="bg-[#171717] border-[#262626]">
                       <SelectItem
                         value="principiante"
                         className="text-[#fafafa] focus:bg-[#262626] focus:text-[#fafafa]"
                       >
-                        Principiante (0-6 meses)
+                        {t("contact.form.exp.beginner")}
                       </SelectItem>
                       <SelectItem value="intermedio" className="text-[#fafafa] focus:bg-[#262626] focus:text-[#fafafa]">
-                        Intermedio (6 meses - 2 años)
+                        {t("contact.form.exp.intermediate")}
                       </SelectItem>
                       <SelectItem value="avanzado" className="text-[#fafafa] focus:bg-[#262626] focus:text-[#fafafa]">
-                        Avanzado (2+ años)
+                        {t("contact.form.exp.advanced")}
                       </SelectItem>
                     </SelectContent>
                   </Select>
@@ -240,7 +242,7 @@ export function ContactFooter() {
 
                 {/* Goal Checkboxes */}
                 <div className="space-y-3">
-                  <Label className="text-sm uppercase tracking-wide">Modalidad de entrenamiento</Label>
+                  <Label className="text-sm uppercase tracking-wide">{t("contact.form.mode")}</Label>
                   <div className="flex flex-wrap gap-6">
                     <div className="flex items-center space-x-3">
                       <Checkbox
@@ -253,7 +255,7 @@ export function ContactFooter() {
                         className="border-[#262626] data-[state=checked]:bg-[#dc2626] data-[state=checked]:border-[#dc2626] w-5 h-5"
                       />
                       <Label htmlFor="presencial" className="text-[#a3a3a3] cursor-pointer">
-                        Presencial
+                        {t("contact.form.presencial")}
                       </Label>
                     </div>
                     <div className="flex items-center space-x-3">
@@ -267,7 +269,7 @@ export function ContactFooter() {
                         className="border-[#262626] data-[state=checked]:bg-[#dc2626] data-[state=checked]:border-[#dc2626] w-5 h-5"
                       />
                       <Label htmlFor="online" className="text-[#a3a3a3] cursor-pointer">
-                        Online
+                        {t("contact.form.online")}
                       </Label>
                     </div>
                   </div>
@@ -288,12 +290,12 @@ export function ContactFooter() {
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
                       <div className="w-5 h-5 border-2 border-[#fafafa]/30 border-t-[#fafafa] rounded-full animate-spin" />
-                      Enviando...
+                      {t("contact.form.submitting")}
                     </span>
                   ) : (
                     <span className="flex items-center gap-2">
                       <Send className="w-5 h-5" />
-                      Enviar mensaje
+                      {t("contact.form.submit")}
                     </span>
                   )}
                 </Button>
@@ -305,7 +307,7 @@ export function ContactFooter() {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-[#262626]">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-[#525252]">
-            <p>© {new Date().getFullYear()} Warrior's Home. Todos los derechos reservados.</p>
+            <p>{"© "}{new Date().getFullYear()}{" Warrior's Home. "}{t("footer.rights")}</p>
             <p>Mar del Plata, Argentina</p>
           </div>
         </div>
