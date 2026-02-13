@@ -3,8 +3,11 @@
 import { motion } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useLanguage } from "@/lib/language-context"
 
 export function HeroSection() {
+  const { t } = useLanguage()
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Parallax Background */}
@@ -29,9 +32,9 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <h1 className="font-[family-name:var(--font-oswald)] text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight leading-none text-balance">
-            No es motivación.
+            {t("hero.headline1")}
             <br />
-            <span className="text-[#dc2626]">Es necesidad.</span>
+            <span className="text-[#dc2626]">{t("hero.headline2")}</span>
           </h1>
         </motion.div>
 
@@ -41,8 +44,8 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="mt-6 md:mt-8 text-lg md:text-xl text-[#a3a3a3] max-w-2xl mx-auto leading-relaxed text-pretty"
         >
-          Cuando no hay fuerza, igual te movés. Cuando no hay ganas, igual salís a pelear.
-          <span className="text-[#fafafa] font-medium"> Bienvenido a Warrior's Home.</span>
+          {t("hero.sub1")}
+          <span className="text-[#fafafa] font-medium">{t("hero.sub2")}</span>
         </motion.p>
 
         <motion.div
@@ -56,7 +59,7 @@ export function HeroSection() {
             size="lg"
             className="bg-[#dc2626] hover:bg-[#b91c1c] text-[#fafafa] font-[family-name:var(--font-oswald)] font-bold text-lg uppercase tracking-wider px-8 py-6 min-h-[56px] transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.4)]"
           >
-            <a href="#contact">Empezá tu transformación</a>
+            <a href="#contact">{t("hero.cta")}</a>
           </Button>
         </motion.div>
       </div>
