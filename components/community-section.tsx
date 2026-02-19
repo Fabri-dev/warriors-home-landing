@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { communityMedia } from "@/lib/community-media"
 
-const SLIDE_INTERVAL = 5000 // ms between auto-advances
+const IMAGE_INTERVAL = 5000 // ms for image slides
 
 function isVideo(path: string) {
   return /\.(mp4|webm|ogg)$/i.test(path)
@@ -19,36 +19,52 @@ export function CommunitySection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   const [index, setIndex] = useState(0)
-  const [direction, setDirection] = useState(1) // 1 = forward, -1 = backward
+  const [direction, setDirection] = useState(1)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
 
   const media = communityMedia
   const total = media.length
 
-  // Start / restart the auto-advance timer
-  const resetTimer = useCallback(() => {
-    if (timerRef.current) clearInterval(timerRef.current)
-    timerRef.current = setInterval(() => {
-      setDirection(1)
-      setIndex((prev) => (prev + 1) % total)
-    }, SLIDE_INTERVAL)
+  // Advance to next slide
+  const advance = useCallback(() => {
+    setDirection(1)
+    setIndex((prev) => (prev + 1) % total)
   }, [total])
 
-  // Kick off timer on mount, clean up on unmount
-  useEffect(() => {
-    resetTimer()
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current)
+  // Start image interval — only used for non-video slides
+  const startImageTimer = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current)
+    timerRef.current = setInterval(advance, IMAGE_INTERVAL)
+  }, [advance])
+
+  const stopTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+      timerRef.current = null
     }
-  }, [resetTimer])
+  }, [])
+
+  // Whenever the slide changes, decide how to time the next advance
+  useEffect(() => {
+    stopTimer()
+    if (!isVideo(media[index])) {
+      startImageTimer()
+    }
+    // For video slides: the <video> onEnded handler calls advance()
+    return () => stopTimer()
+  }, [index, media, startImageTimer, stopTimer, isVideo])
 
   const goTo = useCallback(
     (newIndex: number, dir: number) => {
+      // Pause current video if navigating away manually
+      if (videoRef.current) {
+        videoRef.current.pause()
+      }
       setDirection(dir)
       setIndex((newIndex + total) % total)
-      resetTimer() // reset auto-advance so no double-skip
     },
-    [total, resetTimer]
+    [total]
   )
 
   const prev = () => goTo(index - 1, -1)
@@ -57,14 +73,10 @@ export function CommunitySection() {
   // Drag / swipe support
   const dragStart = useRef(0)
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
-    dragStart.current =
-      "touches" in e ? e.touches[0].clientX : e.clientX
+    dragStart.current = "touches" in e ? e.touches[0].clientX : e.clientX
   }
   const handleDragEnd = (e: React.MouseEvent | React.TouchEvent) => {
-    const endX =
-      "changedTouches" in e
-        ? e.changedTouches[0].clientX
-        : e.clientX
+    const endX = "changedTouches" in e ? e.changedTouches[0].clientX : e.clientX
     const delta = dragStart.current - endX
     if (Math.abs(delta) > 50) {
       delta > 0 ? next() : prev()
@@ -144,11 +156,13 @@ export function CommunitySection() {
               >
                 {isVideo(current) ? (
                   <video
+                    ref={videoRef}
                     src={current}
                     autoPlay
                     muted
-                    loop
                     playsInline
+                    // Do NOT loop — we need the ended event to fire
+                    onEnded={advance}
                     className="w-full h-full object-cover"
                   />
                 ) : (
