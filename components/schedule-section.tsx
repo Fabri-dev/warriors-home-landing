@@ -4,18 +4,20 @@ import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
 import { useRef } from "react"
 import { MapPin, Clock } from "lucide-react"
-
-const schedule = [
-  { time: "13:00", label: "Mediodía" },
-  { time: "14:00", label: "Siesta" },
-  { time: "18:00", label: "Tarde" },
-  { time: "19:00", label: "Prime Time" },
-  { time: "20:00", label: "Noche" },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function ScheduleSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const { t } = useLanguage()
+
+  const schedule = [
+    { time: "13:00", labelKey: "schedule.noon" },
+    { time: "14:00", labelKey: "schedule.siesta" },
+    { time: "18:00", labelKey: "schedule.afternoon" },
+    { time: "19:00", labelKey: "schedule.primetime" },
+    { time: "20:00", labelKey: "schedule.night" },
+  ]
 
   return (
     <section id="schedule" className="py-20 md:py-32 bg-[#171717]" ref={ref}>
@@ -27,9 +29,9 @@ export function ScheduleSection() {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-[#dc2626] uppercase tracking-widest text-sm font-semibold mb-4">Horarios</p>
+            <p className="text-[#dc2626] uppercase tracking-widest text-sm font-semibold mb-4">{t("schedule.label")}</p>
             <h2 className="font-[family-name:var(--font-oswald)] text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight mb-8">
-              Lunes a <span className="text-[#dc2626]">Viernes</span>
+              {t("schedule.headline1")}<span className="text-[#dc2626]">{t("schedule.headline2")}</span>
             </h2>
 
             <div className="space-y-4">
@@ -45,7 +47,7 @@ export function ScheduleSection() {
                     <Clock className="w-4 h-4 text-[#dc2626]" />
                     <span className="font-[family-name:var(--font-oswald)] text-xl font-bold">{slot.time}</span>
                   </div>
-                  <span className="text-[#a3a3a3] text-sm uppercase tracking-wide">{slot.label}</span>
+                  <span className="text-[#a3a3a3] text-sm uppercase tracking-wide">{t(slot.labelKey)}</span>
                 </motion.div>
               ))}
             </div>
@@ -81,9 +83,9 @@ export function ScheduleSection() {
                   </div>
                   <div>
                     <h3 className="font-[family-name:var(--font-oswald)] text-xl font-bold uppercase mb-1">
-                      Mar del Plata
+                      {t("schedule.location")}
                     </h3>
-                    <p className="text-[#a3a3a3]">Argentina</p>
+                    <p className="text-[#a3a3a3]">{t("schedule.country")}</p>
                   </div>
                 </div>
               </div>

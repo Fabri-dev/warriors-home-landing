@@ -4,42 +4,42 @@ import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
 import { useRef } from "react"
 import { Users, Sparkles, GraduationCap, Smartphone } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
-const programs = [
+const programKeys = [
   {
     id: "crossfit",
-    title: "CrossFit General",
-    subtitle: "Comunidad y Fuerza",
-    description: "Para todos los niveles. Entrenamiento funcional en grupo con el soporte de la comunidad.",
+    titleKey: "programs.crossfit.title",
+    subtitleKey: "programs.crossfit.subtitle",
+    descKey: "programs.crossfit.desc",
     icon: Users,
     featured: false,
     size: "large",
   },
   {
     id: "warrior-women",
-    title: "Warrior Women",
-    subtitle: "Rendimiento y Estética",
-    description:
-      "Fase metabólica + Bloque de hipertrofia enfocado en tren inferior. Salud y composición corporal real.",
+    titleKey: "programs.women.title",
+    subtitleKey: "programs.women.subtitle",
+    descKey: "programs.women.desc",
+    badgeKey: "programs.women.badge",
     icon: Sparkles,
     featured: true,
     size: "medium",
   },
   {
     id: "beginners",
-    title: "Principiantes",
-    subtitle: "Aprendé a moverte",
-    description: "Priorizamos la técnica y la base antes de la intensidad. Te convertimos en atleta paso a paso.",
+    titleKey: "programs.beginners.title",
+    subtitleKey: "programs.beginners.subtitle",
+    descKey: "programs.beginners.desc",
     icon: GraduationCap,
     featured: false,
     size: "medium",
   },
   {
     id: "online",
-    title: "Coaching Online",
-    subtitle: "100% Personalizado",
-    description:
-      "Planificación por documento, feedback de técnica mediante video y contacto directo por WhatsApp/Mail. No sos un número en una app.",
+    titleKey: "programs.online.title",
+    subtitleKey: "programs.online.subtitle",
+    descKey: "programs.online.desc",
     icon: Smartphone,
     featured: false,
     size: "large",
@@ -49,6 +49,7 @@ const programs = [
 export function ProgramsSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const { t } = useLanguage()
 
   return (
     <section id="programs" className="py-20 md:py-32 bg-[#0a0a0a]" ref={ref}>
@@ -60,15 +61,15 @@ export function ProgramsSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <p className="text-[#dc2626] uppercase tracking-widest text-sm font-semibold mb-4">Programas</p>
+          <p className="text-[#dc2626] uppercase tracking-widest text-sm font-semibold mb-4">{t("programs.label")}</p>
           <h2 className="font-[family-name:var(--font-oswald)] text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight">
-            Elegí tu <span className="text-[#dc2626]">camino</span>
+            {t("programs.headline1")}<span className="text-[#dc2626]">{t("programs.headline2")}</span>
           </h2>
         </motion.div>
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {programs.map((program, index) => {
+          {programKeys.map((program, index) => {
             const Icon = program.icon
             const isLarge = program.size === "large"
 
@@ -90,10 +91,10 @@ export function ProgramsSection() {
                 `}
               >
                 {/* Featured Badge */}
-                {program.featured && (
+                {program.featured && program.badgeKey && (
                   <div className="absolute top-4 right-4">
                     <span className="bg-[#eab308] text-[#0a0a0a] text-xs font-bold uppercase tracking-wider px-3 py-1 rounded">
-                      Popular
+                      {t(program.badgeKey)}
                     </span>
                   </div>
                 )}
@@ -110,16 +111,16 @@ export function ProgramsSection() {
 
                 {/* Content */}
                 <h3 className="font-[family-name:var(--font-oswald)] text-xl md:text-2xl font-bold uppercase tracking-tight mb-2">
-                  {program.title}
+                  {t(program.titleKey)}
                 </h3>
                 <p
                   className={`text-sm font-semibold uppercase tracking-wide mb-4 ${
                     program.featured ? "text-[#eab308]" : "text-[#dc2626]"
                   }`}
                 >
-                  {program.subtitle}
+                  {t(program.subtitleKey)}
                 </p>
-                <p className="text-[#a3a3a3] leading-relaxed">{program.description}</p>
+                <p className="text-[#a3a3a3] leading-relaxed">{t(program.descKey)}</p>
 
                 {/* Hover accent line */}
                 <div

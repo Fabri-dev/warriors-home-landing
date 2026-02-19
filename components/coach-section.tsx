@@ -4,8 +4,10 @@ import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
 import { useRef } from "react"
 import { Trophy, Award } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
 export function CoachSection() {
+  const { t } = useLanguage()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
@@ -41,7 +43,7 @@ export function CoachSection() {
             className="space-y-6"
           >
             <div>
-              <p className="text-[#dc2626] uppercase tracking-widest text-sm font-semibold mb-2">Head Coach</p>
+              <p className="text-[#dc2626] uppercase tracking-widest text-sm font-semibold mb-2">{t("coach.label")}</p>
               <h2 className="font-[family-name:var(--font-oswald)] text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight">
                 Rodrigo "Coti"
                 <br />
@@ -54,36 +56,35 @@ export function CoachSection() {
               <div className="flex items-center gap-2 bg-[#171717] border border-[#eab308]/30 px-4 py-2 rounded">
                 <Trophy className="w-5 h-5 text-[#eab308]" />
                 <span className="text-sm font-medium text-[#eab308]">
-                  Southfit Challenge Elite Individual - 2do Puesto
+                  {t("coach.badge1")}
                 </span>
               </div>
               <div className="flex items-center gap-2 bg-[#171717] border border-[#262626] px-4 py-2 rounded">
                 <Award className="w-5 h-5 text-[#fafafa]" />
-                <span className="text-sm font-medium">CrossFit Coach & Athlete</span>
+                <span className="text-sm font-medium">{t("coach.badge2")}</span>
               </div>
             </div>
 
             {/* Quote */}
             <blockquote className="border-l-4 border-[#dc2626] pl-6 py-2">
               <p className="text-lg md:text-xl text-[#a3a3a3] leading-relaxed italic">
-                "Detrás de cada avance hay constancia. Mi trabajo es ajustar detalles y corregir movimientos para que
-                saques el mayor jugo a tu entrenamiento."
+                "{t("coach.quote")}"
               </p>
             </blockquote>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 pt-4">
-              <div className="text-center p-4 bg-[#171717] rounded">
-                <p className="font-[family-name:var(--font-oswald)] text-3xl font-bold text-[#dc2626]">8+</p>
-                <p className="text-xs text-[#a3a3a3] uppercase tracking-wide mt-1">Años exp.</p>
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-4">
+              <div className="text-center px-2 py-3 sm:p-4 bg-[#171717] rounded">
+                <p className="font-[family-name:var(--font-oswald)] text-2xl sm:text-3xl font-bold text-[#dc2626]">{t("coach.stat1.value")}</p>
+                <p className="text-[10px] sm:text-xs text-[#a3a3a3] uppercase tracking-wide mt-1">{t("coach.stat1.label")}</p>
               </div>
-              <div className="text-center p-4 bg-[#171717] rounded">
-                <p className="font-[family-name:var(--font-oswald)] text-3xl font-bold text-[#dc2626]">500+</p>
-                <p className="text-xs text-[#a3a3a3] uppercase tracking-wide mt-1">Atletas</p>
+              <div className="text-center px-2 py-3 sm:p-4 bg-[#171717] rounded">
+                <p className="font-[family-name:var(--font-oswald)] text-2xl sm:text-3xl font-bold text-[#dc2626]">{t("coach.stat2.value")}</p>
+                <p className="text-[10px] sm:text-xs text-[#a3a3a3] uppercase tracking-wide mt-1">{t("coach.stat2.label")}</p>
               </div>
-              <div className="text-center p-4 bg-[#171717] rounded">
-                <p className="font-[family-name:var(--font-oswald)] text-3xl font-bold text-[#eab308]">Top 2</p>
-                <p className="text-xs text-[#a3a3a3] uppercase tracking-wide mt-1">Southfit</p>
+              <div className="text-center px-2 py-3 sm:p-4 bg-[#171717] rounded">
+                <p className="font-[family-name:var(--font-oswald)] text-2xl sm:text-3xl font-bold text-[#eab308]">{t("coach.stat3.value")}</p>
+                <p className="text-[10px] sm:text-xs text-[#a3a3a3] uppercase tracking-wide mt-1">{t("coach.stat3.label")}</p>
               </div>
             </div>
           </motion.div>
