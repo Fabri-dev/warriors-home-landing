@@ -16,7 +16,7 @@ export function PhilosophySection() {
       <div
         className="parallax-bg absolute inset-0 bg-fixed bg-cover bg-center"
         style={{
-          backgroundImage: `url('/placeholder.svg?height=1080&width=1920')`,
+          backgroundImage: `url('/photos/snatch.png')`,
         }}
       />
 

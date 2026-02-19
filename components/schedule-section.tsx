@@ -20,7 +20,7 @@ export function ScheduleSection() {
   ]
 
   return (
-    <section id="schedule" className="py-20 md:py-32 bg-[#171717]" ref={ref}>
+    <section id="schedule" className="py-20 md:py-32 bg-[#171717] cursor-default" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left - Schedule */}
@@ -47,10 +47,20 @@ export function ScheduleSection() {
                     <Clock className="w-4 h-4 text-[#dc2626]" />
                     <span className="font-[family-name:var(--font-oswald)] text-xl font-bold">{slot.time}</span>
                   </div>
-                  <span className="text-[#a3a3a3] text-sm uppercase tracking-wide">{t(slot.labelKey)}</span>
                 </motion.div>
               ))}
             </div>
+
+            {/* Tagline */}
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              className="mt-8 font-[family-name:var(--font-oswald)] text-2xl md:text-3xl font-bold uppercase tracking-tight text-[#a3a3a3]"
+            >
+              {t("schedule.tagline")}
+              <span className="text-[#dc2626]">?</span>
+            </motion.p>
           </motion.div>
 
           {/* Right - Location */}
@@ -61,18 +71,18 @@ export function ScheduleSection() {
             className="relative"
           >
             <div className="bg-[#0a0a0a] border border-[#262626] rounded-lg overflow-hidden">
-              {/* Map placeholder */}
-              <div className="aspect-video bg-[#171717] relative">
-                <img
-                  src="/placeholder.svg?height=400&width=600"
-                  alt="Ubicación Mar del Plata"
-                  className="w-full h-full object-cover opacity-60"
+              {/* Real Google Maps embed */}
+              <div className="aspect-video relative overflow-hidden">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3141.847!2d-57.56256!3d-38.00347!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9584d9623a4c13b5%3A0x0!2sMaipu+4118%2C+Mar+del+Plata%2C+Buenos+Aires%2C+Argentina!5e0!3m2!1ses!2sar!4v1700000000000!5m2!1ses!2sar"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, filter: "invert(90%) hue-rotate(180deg) saturate(0.6)", position: "absolute", inset: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Ubicación Warriors Home – Maipu 4118, Mar del Plata"
                 />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-[#dc2626] p-4 rounded-full animate-pulse">
-                    <MapPin className="w-8 h-8 text-[#fafafa]" />
-                  </div>
-                </div>
               </div>
 
               {/* Location info */}

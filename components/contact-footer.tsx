@@ -86,7 +86,7 @@ export function ContactFooter() {
   }
 
   return (
-    <footer id="contact" className="py-20 md:py-32 bg-[#0a0a0a]" ref={ref}>
+    <footer id="contact" className="py-20 md:py-32 bg-[#0a0a0a] cursor-default" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Left - Quote */}

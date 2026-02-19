@@ -27,6 +27,10 @@ export const metadata: Metadata = {
     description: "No es motivación. Es necesidad. Entrenamiento de élite en Mar del Plata.",
     type: "website",
   },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
     generator: 'v0.app'
 }
 

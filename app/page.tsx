@@ -5,6 +5,7 @@ import { LanguageProvider } from "@/lib/language-context"
 import { Navbar } from "@/components/navbar"
 import { HeroSection } from "@/components/hero-section"
 import { CoachSection } from "@/components/coach-section"
+import { CommunitySection } from "@/components/community-section"
 import { PhilosophySection } from "@/components/philosophy-section"
 import { ProgramsSection } from "@/components/programs-section"
 import { ScheduleSection } from "@/components/schedule-section"
@@ -21,6 +22,7 @@ export default function HomePage() {
         <Navbar onMobileMenuChange={setIsMobileMenuOpen} />
         <HeroSection />
         <CoachSection />
+        <CommunitySection />
         <PhilosophySection />
         <ProgramsSection />
         <ScheduleSection />

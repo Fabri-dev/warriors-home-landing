@@ -25,7 +25,7 @@ export function CoachSection() {
             <div className="relative aspect-[4/5] overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-[#dc2626]/20 to-transparent z-10" />
               <img
-                src="/placeholder.svg?height=800&width=640"
+                src="/photos/coach.jpeg"
                 alt="Coach Coti del Ferrero"
                 className="w-full h-full object-cover"
               />

@@ -39,6 +39,12 @@ const translations: Record<Language, Record<string, string>> = {
     "coach.stat3.value": "Top 2",
     "coach.stat3.label": "Southfit",
 
+    // Community
+    "community.label": "Nuestra Comunidad",
+    "community.headline1": "Más que un box,",
+    "community.headline2": "una familia.",
+    "community.sub": "Warriors Home es el lugar donde cada atleta encuentra su tribu. Entrenamos juntos, crecemos juntos.",
+
     // Philosophy
     "philosophy.label": "Nuestra Filosofía",
     "philosophy.headline1": "La técnica ",
@@ -67,6 +73,7 @@ const translations: Record<Language, Record<string, string>> = {
     "schedule.label": "Horarios",
     "schedule.headline1": "Lunes a ",
     "schedule.headline2": "Viernes",
+    "schedule.tagline": "¿Qué excusa tenés",
     "schedule.noon": "Mediodía",
     "schedule.siesta": "Siesta",
     "schedule.afternoon": "Tarde",
@@ -150,6 +157,12 @@ const translations: Record<Language, Record<string, string>> = {
     "coach.stat3.value": "Top 2",
     "coach.stat3.label": "Southfit",
 
+    // Community
+    "community.label": "Our Community",
+    "community.headline1": "More than a box,",
+    "community.headline2": "a family.",
+    "community.sub": "Warriors Home is the place where every athlete finds their tribe. We train together, we grow together.",
+
     // Philosophy
     "philosophy.label": "Our Philosophy",
     "philosophy.headline1": "Technique is ",
@@ -178,6 +191,7 @@ const translations: Record<Language, Record<string, string>> = {
     "schedule.label": "Schedule",
     "schedule.headline1": "Monday to ",
     "schedule.headline2": "Friday",
+    "schedule.tagline": "What's your excuse",
     "schedule.noon": "Noon",
     "schedule.siesta": "Early afternoon",
     "schedule.afternoon": "Afternoon",

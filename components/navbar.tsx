@@ -55,9 +55,11 @@ export function Navbar({ onMobileMenuChange }: NavbarProps) {
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <a href="#" className="flex items-center gap-2">
-              <span className="font-[family-name:var(--font-oswald)] text-xl md:text-2xl font-bold tracking-wider uppercase">
-                {"Warrior's"} <span className="text-[#dc2626]">Home</span>
-              </span>
+              <img
+                src="/warriors-logo.png"
+                alt="Warrior's Home"
+                className="h-10 md:h-12 w-auto object-contain"
+              />
             </a>
 
             {/* Desktop Navigation */}

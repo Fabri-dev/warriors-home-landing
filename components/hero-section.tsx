@@ -14,12 +14,12 @@ export function HeroSection() {
       <div
         className="parallax-bg absolute inset-0 bg-fixed bg-cover bg-center"
         style={{
-          backgroundImage: `url('/placeholder.svg?height=1080&width=1920')`,
+          backgroundImage: `url('/photos/grupal4.jpeg')`,
         }}
       />
 
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/70 via-[#0a0a0a]/60 to-[#0a0a0a]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/80 via-[#0a0a0a]/75 to-[#0a0a0a]" />
 
       {/* Red accent line */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#dc2626] to-transparent" />
@@ -31,7 +31,10 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="font-[family-name:var(--font-oswald)] text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight leading-none text-balance">
+          <h1
+            className="font-[family-name:var(--font-oswald)] text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight leading-none text-balance"
+            style={{ textShadow: "0 2px 20px rgba(0,0,0,0.9), 0 0 60px rgba(0,0,0,0.6)" }}
+          >
             {t("hero.headline1")}
             <br />
             <span className="text-[#dc2626]">{t("hero.headline2")}</span>
