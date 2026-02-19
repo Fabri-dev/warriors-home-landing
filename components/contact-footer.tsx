@@ -78,11 +78,25 @@ export function ContactFooter() {
 
     setIsSubmitting(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
 
-    setIsSubmitting(false)
-    setIsSubmitted(true)
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || "Error al enviar el mensaje.")
+      }
+
+      setIsSubmitted(true)
+    } catch (err) {
+      // Show error inside the form without losing the user's data
+      setErrors({ goal: err instanceof Error ? err.message : "Error al enviar. Intentá de nuevo." })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (

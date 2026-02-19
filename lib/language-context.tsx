@@ -32,7 +32,7 @@ const translations: Record<Language, Record<string, string>> = {
     "coach.badge1": "Southfit Challenge Elite Individual - 2do Puesto",
     "coach.badge2": "CrossFit Coach & Athlete",
     "coach.quote": "Detrás de cada avance hay constancia. Mi trabajo es ajustar detalles y corregir movimientos para que saques el mayor jugo a tu entrenamiento.",
-    "coach.stat1.value": "8+",
+    "coach.stat1.value": "10+",
     "coach.stat1.label": "Años exp.",
     "coach.stat2.value": "500+",
     "coach.stat2.label": "Atletas",
