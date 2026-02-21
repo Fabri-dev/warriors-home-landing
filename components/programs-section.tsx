@@ -52,7 +52,7 @@ export function ProgramsSection() {
   const { t } = useLanguage()
 
   return (
-    <section id="programs" className="py-20 md:py-32 bg-[#0a0a0a]" ref={ref}>
+    <section id="programs" className="py-12 md:py-20 bg-[#0a0a0a]" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div

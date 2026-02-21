@@ -7,11 +7,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { communityMedia } from "@/lib/community-media"
 
-const IMAGE_INTERVAL = 5000 // ms for image slides
-
-function isVideo(path: string) {
-  return /\.(mp4|webm|ogg)$/i.test(path)
-}
+const IMAGE_INTERVAL = 5000 // ms between auto-advance
 
 export function CommunitySection() {
   const { t } = useLanguage()
@@ -21,19 +17,16 @@ export function CommunitySection() {
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState(1)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const videoRef = useRef<HTMLVideoElement | null>(null)
 
   const media = communityMedia
   const total = media.length
 
-  // Advance to next slide
   const advance = useCallback(() => {
     setDirection(1)
     setIndex((prev) => (prev + 1) % total)
   }, [total])
 
-  // Start image interval — only used for non-video slides
-  const startImageTimer = useCallback(() => {
+  const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current)
     timerRef.current = setInterval(advance, IMAGE_INTERVAL)
   }, [advance])
@@ -45,22 +38,14 @@ export function CommunitySection() {
     }
   }, [])
 
-  // Whenever the slide changes, decide how to time the next advance
+  // Auto-advance on every slide change
   useEffect(() => {
-    stopTimer()
-    if (!isVideo(media[index])) {
-      startImageTimer()
-    }
-    // For video slides: the <video> onEnded handler calls advance()
+    startTimer()
     return () => stopTimer()
-  }, [index, media, startImageTimer, stopTimer, isVideo])
+  }, [index, startTimer, stopTimer])
 
   const goTo = useCallback(
     (newIndex: number, dir: number) => {
-      // Pause current video if navigating away manually
-      if (videoRef.current) {
-        videoRef.current.pause()
-      }
       setDirection(dir)
       setIndex((newIndex + total) % total)
     },
@@ -97,7 +82,7 @@ export function CommunitySection() {
     <section
       id="community"
       ref={ref}
-      className="py-20 md:py-32 bg-[#0a0a0a] overflow-hidden"
+      className="py-12 md:py-20 bg-[#0a0a0a] overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -154,25 +139,12 @@ export function CommunitySection() {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="absolute inset-0"
               >
-                {isVideo(current) ? (
-                  <video
-                    ref={videoRef}
-                    src={current}
-                    autoPlay
-                    muted
-                    playsInline
-                    // Do NOT loop — we need the ended event to fire
-                    onEnded={advance}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <img
-                    src={current}
-                    alt={`Warriors Home community moment ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    draggable={false}
-                  />
-                )}
+                <img
+                  src={current}
+                  alt={`Warriors Home community moment ${index + 1}`}
+                  className="w-full h-full object-cover"
+                  draggable={false}
+                />
               </motion.div>
             </AnimatePresence>
           </div>

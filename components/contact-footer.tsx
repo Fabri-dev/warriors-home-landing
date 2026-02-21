@@ -6,13 +6,15 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
 import { useRef } from "react"
-import { Instagram, Send, CheckCircle, AlertCircle } from "lucide-react"
+import { Instagram, MessageCircle, CheckCircle, AlertCircle, Copy, Check, RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useLanguage } from "@/lib/language-context"
+
+const INSTAGRAM_USERNAME = "warriors.home_"
 
 interface FormData {
   name: string
@@ -27,6 +29,27 @@ interface FormErrors {
   phone?: string
   experience?: string
   goal?: string
+}
+
+function buildInstagramMessage(data: FormData): string {
+  const modality = [data.presencial && "Presencial", data.online && "Online"]
+    .filter(Boolean)
+    .join(" + ")
+
+  const experienceLabel: Record<string, string> = {
+    principiante: "Principiante (0-6 meses)",
+    intermedio: "Intermedio (6 meses - 2 años)",
+    avanzado: "Avanzado (2+ años)",
+  }
+
+  return [
+    `¡Hola! Me interesa unirme a Warrior's Home 🥊`,
+    ``,
+    `• Nombre: ${data.name}`,
+    `• WhatsApp: ${data.phone}`,
+    `• Nivel: ${experienceLabel[data.experience] ?? data.experience}`,
+    `• Modalidad: ${modality}`,
+  ].join("\n")
 }
 
 export function ContactFooter() {
@@ -44,7 +67,8 @@ export function ContactFooter() {
 
   const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [copiedMessage, setCopiedMessage] = useState("")
+  const [justCopied, setJustCopied] = useState(false)
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
@@ -71,36 +95,41 @@ export function ContactFooter() {
     return Object.keys(newErrors).length === 0
   }
 
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setJustCopied(true)
+      setTimeout(() => setJustCopied(false), 2000)
+    } catch {
+      // fallback: select a textarea
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!validateForm()) return
 
-    setIsSubmitting(true)
+    const message = buildInstagramMessage(formData)
+    // Copy message to clipboard before opening Instagram
+    // (Instagram Web ignores the ?text= param on desktop)
+    await copyToClipboard(message)
+    setCopiedMessage(message)
 
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      })
+    const url = `https://ig.me/m/${INSTAGRAM_USERNAME}?text=${encodeURIComponent(message)}`
+    window.open(url, "_blank", "noopener,noreferrer")
+    setIsSubmitted(true)
+  }
 
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error || "Error al enviar el mensaje.")
-      }
-
-      setIsSubmitted(true)
-    } catch (err) {
-      // Show error inside the form without losing the user's data
-      setErrors({ goal: err instanceof Error ? err.message : "Error al enviar. Intentá de nuevo." })
-    } finally {
-      setIsSubmitting(false)
-    }
+  const handleReset = () => {
+    setFormData({ name: "", phone: "", experience: "", presencial: false, online: false })
+    setErrors({})
+    setIsSubmitted(false)
+    setCopiedMessage("")
   }
 
   return (
-    <footer id="contact" className="py-20 md:py-32 bg-[#0a0a0a] cursor-default" ref={ref}>
+    <footer id="contact" className="py-12 md:py-20 bg-[#0a0a0a] cursor-default" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Left - Quote */}
@@ -126,7 +155,7 @@ export function ContactFooter() {
             {/* Social */}
             <div className="mt-12">
               <a
-                href="https://instagram.com/warriors.home_"
+                href={`https://instagram.com/${INSTAGRAM_USERNAME}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 text-[#a3a3a3] hover:text-[#fafafa] transition-colors group"
@@ -134,7 +163,7 @@ export function ContactFooter() {
                 <div className="bg-[#171717] p-3 rounded group-hover:bg-[#dc2626]/20 transition-colors">
                   <Instagram className="w-6 h-6" />
                 </div>
-                <span className="font-medium">@warriors.home_</span>
+                <span className="font-medium">@{INSTAGRAM_USERNAME}</span>
               </a>
             </div>
           </motion.div>
@@ -146,14 +175,46 @@ export function ContactFooter() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             {isSubmitted ? (
-              <div className="bg-[#171717] border border-[#262626] rounded-lg p-8 text-center">
-                <div className="bg-[#dc2626]/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <CheckCircle className="w-8 h-8 text-[#dc2626]" />
+              <div className="bg-[#171717] border border-[#262626] rounded-lg p-6 md:p-8 space-y-5">
+                {/* Header */}
+                <div className="flex items-center gap-3">
+                  <div className="bg-[#dc2626]/10 w-12 h-12 rounded-full flex items-center justify-center shrink-0">
+                    <CheckCircle className="w-6 h-6 text-[#dc2626]" />
+                  </div>
+                  <div>
+                    <h3 className="font-[family-name:var(--font-oswald)] text-xl font-bold uppercase">
+                      {t("contact.form.success.title")}
+                    </h3>
+                    <p className="text-[#a3a3a3] text-sm mt-0.5">{t("contact.form.success.text")}</p>
+                  </div>
                 </div>
-                <h3 className="font-[family-name:var(--font-oswald)] text-2xl font-bold uppercase mb-3">
-                  {t("contact.form.success.title")}
-                </h3>
-                <p className="text-[#a3a3a3]">{t("contact.form.success.text")}</p>
+
+                {/* Message preview */}
+                <div className="bg-[#0a0a0a] border border-[#262626] rounded-lg p-4">
+                  <p className="text-[#525252] text-xs uppercase tracking-wider mb-2">{t("contact.form.success.message_label")}</p>
+                  <pre className="text-[#a3a3a3] text-sm whitespace-pre-wrap font-sans leading-relaxed">{copiedMessage}</pre>
+                </div>
+
+                {/* Copy again button */}
+                <button
+                  onClick={() => copyToClipboard(copiedMessage)}
+                  className="w-full flex items-center justify-center gap-2 border border-[#262626] hover:border-[#dc2626] text-[#a3a3a3] hover:text-[#fafafa] rounded-lg py-3 text-sm transition-all duration-200"
+                >
+                  {justCopied ? (
+                    <><Check className="w-4 h-4 text-[#dc2626]" /> {t("contact.form.success.copied")}</>
+                  ) : (
+                    <><Copy className="w-4 h-4" /> {t("contact.form.success.copy_again")}</>
+                  )}
+                </button>
+
+                {/* Reset button */}
+                <button
+                  onClick={handleReset}
+                  className="w-full flex items-center justify-center gap-2 bg-[#262626] hover:bg-[#dc2626] text-[#fafafa] rounded-lg py-3 text-sm font-semibold uppercase tracking-wider transition-all duration-200"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  {t("contact.form.success.another")}
+                </button>
               </div>
             ) : (
               <form
@@ -298,20 +359,12 @@ export function ContactFooter() {
                 {/* Submit Button */}
                 <Button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-[#dc2626] hover:bg-[#b91c1c] text-[#fafafa] font-[family-name:var(--font-oswald)] font-bold text-lg uppercase tracking-wider min-h-[56px] transition-all hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] disabled:opacity-70"
+                  className="w-full bg-[#dc2626] hover:bg-[#b91c1c] text-[#fafafa] font-[family-name:var(--font-oswald)] font-bold text-lg uppercase tracking-wider min-h-[56px] transition-all hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(220,38,38,0.4)]"
                 >
-                  {isSubmitting ? (
-                    <span className="flex items-center gap-2">
-                      <div className="w-5 h-5 border-2 border-[#fafafa]/30 border-t-[#fafafa] rounded-full animate-spin" />
-                      {t("contact.form.submitting")}
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      <Send className="w-5 h-5" />
-                      {t("contact.form.submit")}
-                    </span>
-                  )}
+                  <span className="flex items-center gap-2">
+                    <MessageCircle className="w-5 h-5" />
+                    {t("contact.form.submit")}
+                  </span>
                 </Button>
               </form>
             )}

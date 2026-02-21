@@ -127,6 +127,9 @@
     @apply bg-background text-foreground;
     overflow-x: hidden;
   }
+  button, [role="button"] {
+    cursor: pointer;
+  }
 }
 
 /* Parallax fallback for iOS */
