@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
 import { useRef } from "react"
+import Image from "next/image"
 import { Trophy, Award } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
@@ -24,10 +25,13 @@ export function CoachSection() {
           >
             <div className="relative aspect-[4/5] overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-[#dc2626]/20 to-transparent z-10" />
-              <img
+              <Image
                 src="/photos/coach.jpeg"
                 alt="Coach Coti del Ferrero"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority={false}
               />
               {/* Red accent border */}
               <div className="absolute bottom-0 left-0 w-full h-1 bg-[#dc2626]" />

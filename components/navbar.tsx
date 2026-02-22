@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Globe } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -55,10 +56,13 @@ export function Navbar({ onMobileMenuChange }: NavbarProps) {
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <a href="#" className="flex items-center gap-3">
-              <img
+              <Image
                 src="/warriors-logo.png"
                 alt="Warrior's Home"
+                width={48}
+                height={48}
                 className="h-10 md:h-12 w-auto object-contain"
+                priority
               />
               <span className="font-[family-name:var(--font-oswald)] text-xl md:text-2xl font-bold tracking-wider uppercase">
                 {"Warrior's"} <span className="text-[#dc2626]">Home</span>

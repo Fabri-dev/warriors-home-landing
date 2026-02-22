@@ -31,7 +31,6 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     apple: "/favicon.ico",
   },
-    generator: 'v0.app'
 }
 
 export const viewport: Viewport = {

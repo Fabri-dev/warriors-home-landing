@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
+import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { useInView } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
@@ -139,10 +140,12 @@ export function CommunitySection() {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="absolute inset-0"
               >
-                <img
+                <Image
                   src={current}
                   alt={`Warriors Home community moment ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 90vw"
                   draggable={false}
                 />
               </motion.div>
